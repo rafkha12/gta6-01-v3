@@ -40,7 +40,7 @@ export const MISSIONS = [
     brief: 'Rosa needs a driver. Pick up the client at the garage, then drive him to the marina hotel.',
     steps: [
       { text: 'Pick up the client at the garage', x: -66, z: -66, r: 6, needCar: false },
-      { text: 'Drive the client to the marina hotel', x: 88, z: 88, r: 7, needCar: true },
+      { text: 'Drive the client to the marina hotel', x: 110, z: 110, r: 7, needCar: true },
     ],
   },
   {
@@ -56,7 +56,7 @@ export const MISSIONS = [
     brief: 'A package is waiting at the plaza. Grab it and deliver it to the NEON BAR.',
     steps: [
       { text: 'Grab the package at the plaza', x: 0, z: 0, r: 6, needCar: false },
-      { text: 'Deliver the package to the NEON BAR', x: -88, z: 44, r: 6, needCar: false },
+      { text: 'Deliver the package to the NEON BAR', x: -66, z: 44, r: 6, needCar: false },
     ],
   },
   {

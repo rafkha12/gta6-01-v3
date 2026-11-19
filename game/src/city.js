@@ -14,20 +14,20 @@ function canvasTexture(w, h, draw) {
 
 function groundTexture(rng) {
   return canvasTexture(1024, 1024, (ctx, W, H) => {
-    // Asphalt base, purple-tinted by the dusk.
-    ctx.fillStyle = '#241d33'; ctx.fillRect(0, 0, W, H);
+    // Asphalt base, purple-tinted by the dusk — bright enough to read.
+    ctx.fillStyle = '#463a5c'; ctx.fillRect(0, 0, W, H);
     const px = W / (WORLD.size * 2); // px per metre
     const toX = (x) => (x + WORLD.size) * px;
     const toZ = (z) => (z + WORLD.size) * px;
     // Sidewalks.
-    ctx.fillStyle = '#3a2f4e';
+    ctx.fillStyle = '#4a3f63';
     for (let i = -5; i <= 5; i += 1) {
       const c = i * WORLD.block;
       ctx.fillRect(toX(c - WORLD.block / 2), 0, WORLD.block * px, H);
       ctx.fillRect(0, toZ(c - WORLD.block / 2), W, WORLD.block * px);
     }
     // Roads.
-    ctx.fillStyle = '#1c1626';
+    ctx.fillStyle = '#322a4a';
     for (let i = -5; i <= 5; i += 1) {
       const c = i * WORLD.block;
       ctx.fillRect(toX(c - WORLD.road / 2), 0, WORLD.road * px, H);
@@ -112,13 +112,13 @@ function makeBeacon(color) {
   const g = new THREE.Group();
   const beam = new THREE.Mesh(
     new THREE.CylinderGeometry(0.5, 1.6, 42, 12, 1, true),
-    new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.22, side: THREE.DoubleSide, depthWrite: false }),
+    new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.32, side: THREE.DoubleSide, depthWrite: false }),
   );
   beam.position.y = 21;
   g.add(beam);
   const ring = new THREE.Mesh(
-    new THREE.RingGeometry(1.6, 2.4, 24),
-    new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.8, side: THREE.DoubleSide }),
+    new THREE.RingGeometry(2.2, 3.2, 24),
+    new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 1.0, side: THREE.DoubleSide }),
   );
   ring.rotation.x = -Math.PI / 2; ring.position.y = 0.06;
   g.add(ring);
@@ -137,21 +137,21 @@ export function createCity(scene, rng) {
   scene.background = skyTex;
   scene.fog = new THREE.Fog(0x8a4a72, 90, 430);
 
-  const hemi = new THREE.HemisphereLight(0x9a6ab8, 0x2a1a33, 0.95);
+  const hemi = new THREE.HemisphereLight(0x9a6ab8, 0x3a2a44, 1.35);
   scene.add(hemi);
-  const sun = new THREE.DirectionalLight(0xffa050, 1.5);
+  const sun = new THREE.DirectionalLight(0xffa050, 2.1);
   sun.position.set(-160, 55, 90);
   scene.add(sun);
-  const fill = new THREE.DirectionalLight(0x7a5aa8, 0.4);
+  const fill = new THREE.DirectionalLight(0xffc080, 0.7);
   fill.position.set(120, 80, -100);
   scene.add(fill);
 
   // The sun disc, low in the west.
   const sunMesh = new THREE.Mesh(
-    new THREE.CircleGeometry(26, 32),
+    new THREE.CircleGeometry(30, 32),
     new THREE.MeshBasicMaterial({ color: 0xffe9a8, fog: false }),
   );
-  sunMesh.position.set(-330, 62, 60);
+  sunMesh.position.set(-330, 85, 100);
   sunMesh.lookAt(0, 40, 0);
   scene.add(sunMesh);
   const glowTex = canvasTexture(128, 128, (ctx, W, H) => {
@@ -163,7 +163,7 @@ export function createCity(scene, rng) {
     new THREE.PlaneGeometry(190, 190),
     new THREE.MeshBasicMaterial({ map: glowTex, transparent: true, depthWrite: false, fog: false }),
   );
-  glow.position.set(-330, 62, 60);
+  glow.position.set(-330, 85, 100);
   glow.lookAt(0, 40, 0);
   scene.add(glow);
 
@@ -249,10 +249,10 @@ export function createCity(scene, rng) {
     marina: makeBeacon(0xffd27d),
   };
   beacons.garage.position.set(-66, 0, -66);
-  beacons.hotel.position.set(88, 0, 88);
+  beacons.hotel.position.set(110, 0, 110);
   beacons.plaza.position.set(0, 0, 0);
   beacons.hideout.position.set(110, 0, 22);
-  beacons.neonBar.position.set(-88, 0, 44);
+  beacons.neonBar.position.set(-66, 0, 44);
   beacons.marina.position.set(88, 0, 132);
   for (const b of Object.values(beacons)) scene.add(b);
 
@@ -261,7 +261,7 @@ export function createCity(scene, rng) {
     update(t) {
       // Neon shimmer + beacon pulse.
       for (const b of Object.values(beacons)) {
-        if (b.visible) b.children[0].material.opacity = 0.16 + 0.08 * Math.sin(t * 3);
+        if (b.visible) b.children[0].material.opacity = 0.26 + 0.08 * Math.sin(t * 3);
       }
     },
   };

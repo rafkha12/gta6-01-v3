@@ -44,7 +44,7 @@ export class Game {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.15;
+    this.renderer.toneMappingExposure = 1.35;
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(62, window.innerWidth / window.innerHeight, 0.1, 900);
 
@@ -127,7 +127,7 @@ export class Game {
     doc.getElementById('btn-mara').addEventListener('click', () => this.selectCharacter('mara'));
     doc.getElementById('btn-dario').addEventListener('click', () => this.selectCharacter('dario'));
     doc.getElementById('btn-mission-accept').addEventListener('click', () => this.acceptMission());
-    doc.getElementById('btn-job').addEventListener('click', () => this.acceptMission());
+    doc.getElementById('job-btn').addEventListener('click', () => this.acceptMission());
     doc.getElementById('btn-resume').addEventListener('click', () => { this.state = 'playing'; show('pause', false); });
     doc.getElementById('btn-restart').addEventListener('click', () => window.location.reload());
     doc.getElementById('btn-restart2').addEventListener('click', () => window.location.reload());
@@ -190,6 +190,8 @@ export class Game {
     const car = this.traffic.cars[0];
     car.x = x; car.z = z; car.angle = angle; car.speed = speed; car.maxSpeed = 38;
     car.mesh.position.set(x, 0, z); car.mesh.rotation.y = angle;
+    // The hero car is bright yellow so it pops at dusk.
+    car.mesh.children[0].material.color.setHex(0xe8a020);
     this.enterCar(car);
     this.playerCar.speed = speed;
   }
@@ -220,6 +222,12 @@ export class Game {
   setMissionBeacon(key) {
     for (const b of Object.values(this.city.beacons)) b.visible = false;
     if (this.city.beacons[key]) this.city.beacons[key].visible = true;
+  }
+  // Jump straight to a later mission (used by the chase / mission shots).
+  startMission(n) {
+    this.missions.setProgress(n);
+    this.missions.offer();
+    this.acceptMission();
   }
 
   // ---- car enter/exit ----

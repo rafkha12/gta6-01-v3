@@ -25,6 +25,7 @@ export function createTraffic(scene, rng) {
       axis, lane, dir, speed: rng.range(8, 14), maxSpeed: rng.range(10, 15),
       x: axis === 'x' ? pos : lane, z: axis === 'x' ? lane : pos,
       angle: 0,
+      updateMesh() { c.mesh.position.set(c.x, 0, c.z); c.mesh.rotation.y = c.angle; },
     };
     c.mesh.position.set(c.x, 0, c.z);
     group.add(c.mesh);

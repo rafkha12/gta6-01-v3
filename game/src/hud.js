@@ -13,6 +13,7 @@ export function createHud(doc) {
   const cardTitle = el('mission-title');
   const cardText = el('mission-text');
   const cardTimer = el('mission-timer');
+  const acceptBtn = el('btn-mission-accept');
   const minimap = el('hud-minimap');
   const mctx = minimap.getContext('2d');
   const S = 180; // minimap px
@@ -73,12 +74,14 @@ export function createHud(doc) {
       const m = game.missions;
       if (m.active) {
         card.style.display = 'block';
+        acceptBtn.style.display = 'none';
         cardTitle.textContent = m.active.def.title + ' — $' + m.active.def.payout;
         const step = m.currentStep();
         cardText.textContent = step ? step.text : '';
         cardTimer.textContent = Math.max(0, Math.ceil(m.active.timer)) + 's';
       } else if (m.offered && m.index < 4) {
         card.style.display = 'block';
+        acceptBtn.style.display = 'inline-block';
         const def = m.offer();
         cardTitle.textContent = 'JOB — ' + def.title + ' — $' + def.payout;
         cardText.textContent = def.brief;

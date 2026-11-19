@@ -18,6 +18,10 @@ export function createMissions(beacons) {
     if (index >= MISSIONS.length || active) return null;
     const def = MISSIONS[index];
     active = { def, step: 0, timer: def.time };
+    // Live target: the current step's coordinates (the play-test drives to it).
+    Object.defineProperty(active, 'target', {
+      get() { const s = currentStep(); return s ? { x: s.x, z: s.z } : null; },
+    });
     offered = false;
     setBeacon();
     return active;
@@ -35,7 +39,7 @@ export function createMissions(beacons) {
   }
   // Map a step's coordinates to the nearest named beacon.
   function stepKey(step) {
-    const spots = { garage: [-66, -66], hotel: [88, 88], plaza: [0, 0], hideout: [110, 22], neonBar: [-88, 44], marina: [88, 132] };
+    const spots = { garage: [-66, -66], hotel: [110, 110], plaza: [0, 0], hideout: [110, 22], neonBar: [-66, 44], marina: [88, 132] };
     let best = 'plaza'; let bd = Infinity;
     for (const [k, [x, z]] of Object.entries(spots)) {
       const d = Math.hypot(step.x - x, step.z - z);
